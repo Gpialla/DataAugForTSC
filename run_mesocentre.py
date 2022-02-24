@@ -1,4 +1,5 @@
 import os
+from pyexpat import model
 
 
 
@@ -9,11 +10,18 @@ DS_2018 = [
 	'CricketY', 'CricketZ', 'Crop', 'DiatomSizeReduction'
 ]
 
-NUM_ITR = 5
+AUG_METHODS = ["scaling", "windowwarp"]
+
+EXP_NAME = "TrainAugSeq"
+NUM_ITR = 1
 CLSSF_NAME = "inception"
 
+EPOCHS      = 600
+BATCH_SIZE  = 64
+
 for ds_name in DS_2018:
-    for i in range(NUM_ITR):
-        command = "sbatch sbatch-main.sh {} {} {} {}".format("UCRArchive_2018", ds_name, "inception", str(i))
-        os.system(command)
-        print("Run command " + command)
+    for aug in AUG_METHODS:
+        for itr in range(NUM_ITR):
+            command = "sbatch sbatch-main.sh {} {} {} {} {} {} {}".format(EXP_NAME, ds_name, aug, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+            os.system(command)
+            print("Run command " + command)

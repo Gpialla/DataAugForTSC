@@ -1,7 +1,10 @@
 import argparse
 import os
+import time
+from tracemalloc import start
 
-from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, CSVLogger, EarlyStopping
+import tensorflow as tf
+from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
 
 from models.helper import MODEL_LIST, get_model_by_name
 
@@ -11,7 +14,7 @@ from data.data_preprocessing import labels_encoding
 from data.helper import load_ucr_dataset, get_preprocessing_by_name
 
 from utils.constants import DEFAULT_OUTPUT_DIR
-from utils.utils import create_dir_if_not_exists
+from utils.utils import create_dir_if_not_exists, save_keras_history, save_predictions, save_records
 
 def training(args):
 
@@ -25,33 +28,52 @@ def training(args):
     # Load data as sequence
     seq_data = SequenceDataAugmentation(x_train, y_train, args.batch_size, aug_method=args.aug_method, shuffle=args.shuffle)
 
-    # For each iteration
-    for i_iter in range(args.num_iters):
-        # Create output directory
+    # Create output directory
+    OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.model, str(args.aug_method), args.ds_name, "Itr_%i" % args.iter)
+    create_dir_if_not_exists(OUTPUT_DIR)
 
-        OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.model, str(args.aug_method), args.ds_name, "Itr_%i" % i_iter)
-        create_dir_if_not_exists(OUTPUT_DIR)
+    # Load model
+    model = get_model_by_name(args.model)       # Get the model
+    model = model(x_train[0].shape, n_classes)  # Initialize the model
+    model.compile(optimizer=args.optimizer, loss=args.loss, metrics=['accuracy'])
 
-        # Load model
-        model = get_model_by_name(args.model)       # Get the model
-        model = model(x_train[0].shape, n_classes)  # Initialize the model
-        model.compile(optimizer=args.optimizer, loss=args.loss, metrics=['accuracy'])
+    # Callbacks
+    PATH_BEST_WEIGHTS = os.path.join(OUTPUT_DIR, "best_weights.h5")
+    model_checkpoint  = ModelCheckpoint(PATH_BEST_WEIGHTS, monitor='loss', save_best_only=True)
+    reduce_lr         = ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=50, mode='auto', min_lr=1e-4)
+    early_stop        = EarlyStopping(monitor="loss", patience=100)
+    callbacks         = [model_checkpoint, reduce_lr, early_stop]
 
-        # Callbacks
-        model_checkpoint = ModelCheckpoint(os.path.join(OUTPUT_DIR, "best_weights.h5"), monitor='loss', save_best_only=True)
-        csv_logger       = CSVLogger(os.path.join(OUTPUT_DIR, 'history.csv'), append=True)
-        reduce_lr        = ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=50, mode='auto', min_lr=1e-4)
-        early_stop       = EarlyStopping(monitor="loss", patience=100)
-        callbacks        = [model_checkpoint, reduce_lr, early_stop, csv_logger]
+    # Save initial weights
+    model.save_weights(os.path.join(OUTPUT_DIR, "init_weights.h5"))
 
-        # Start training
-        model.save_weights(os.path.join(OUTPUT_DIR, "init_weights.h5"))
-        model.fit(
-            seq_data,
-            epochs=args.num_epochs,
-            callbacks=callbacks,
-            verbose=True
-        )
+    # Start training
+    start_time = time.time()
+    history = model.fit(
+        seq_data,
+        epochs=args.num_epochs,
+        callbacks=callbacks,
+        verbose=True
+    )
+    training_time = time.time() - start_time
+
+    # Make predictions using best model
+    model = tf.keras.models.load_model(PATH_BEST_WEIGHTS)
+    start_time = time.time()
+    y_pred = model.predict(x_test)
+    pred_time = time.time() - start_time
+    
+    # Recordings
+    records = dict()
+    records["training_time"] = training_time
+    records["pred_time"]    = pred_time
+    records["test_acc"]     = tf.keras.metrics.categorical_accuracy(y_test, y_pred).numpy().mean()
+    records["test_loss"]    = tf.keras.metrics.get(args.loss)(y_test, y_pred).numpy().mean()
+
+    # Save recordings
+    save_keras_history(history, os.path.join(OUTPUT_DIR, "history.csv"))
+    save_predictions(y_pred, os.path.join(OUTPUT_DIR, "y_preds.npy"))
+    save_records(records, os.path.join(OUTPUT_DIR, "records.json"))
 
 
 if __name__ == "__main__":
@@ -75,7 +97,7 @@ if __name__ == "__main__":
     parser.add_argument("--optimizer", type=str, default="adam")
     parser.add_argument("--loss", type=str, default="categorical_crossentropy")
 
-    parser.add_argument("--num_iters", type=int, default=1, help="The number of training to do.")
+    parser.add_argument("--iter", type=int, default=0, help="The iteration index")
     args = parser.parse_args()
 
     training(args)
