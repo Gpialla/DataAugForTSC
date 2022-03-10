@@ -41,7 +41,6 @@ def feature_scaling(x_train, x_test):
     x_test_norm = 2. * (x_test - min_) / (max_ - min_) - 1.
     return x_train_norm, x_test_norm
 
-
 def labels_encoding(y_train, y_test, format=None):
     """
     Encoding for the labels

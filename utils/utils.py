@@ -30,3 +30,7 @@ def save_predictions(preds, filepath):
 def save_records(records, filepath):
     with open(filepath, 'w') as f:
         json.dump(str(records), f)
+
+def split_list_in_groups(a, n):
+    k, m = divmod(len(a), n)
+    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
