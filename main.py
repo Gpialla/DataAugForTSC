@@ -26,7 +26,13 @@ def training(args):
     y_train, y_test, n_classes, _ = labels_encoding(y_train, y_test, format="OHE")
     
     # Load data as sequence
-    seq_data = SequenceDataAugmentation(x_train, y_train, args.batch_size, aug_methods=args.aug_method, shuffle=args.shuffle)
+    seq_data = SequenceDataAugmentation(
+        x_train, y_train, 
+        args.batch_size, 
+        aug_methods=args.aug_method, 
+        aug_data_each_epoch=args.aug_each_epch, 
+        shuffle=args.shuffle
+    )
 
     # Create output directory
     OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.model, str(args.aug_method), args.ds_name, "Itr_%i" % args.iter)
@@ -41,8 +47,8 @@ def training(args):
     PATH_BEST_WEIGHTS = os.path.join(OUTPUT_DIR, "best_weights.h5")
     model_checkpoint  = ModelCheckpoint(PATH_BEST_WEIGHTS, monitor='loss', save_best_only=True)
     reduce_lr         = ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=50, mode='auto', min_lr=1e-4)
-    early_stop        = EarlyStopping(monitor="loss", patience=100)
-    callbacks         = [model_checkpoint, reduce_lr, early_stop]
+    #early_stop        = EarlyStopping(monitor="loss", patience=100)
+    callbacks         = [model_checkpoint, reduce_lr]#, early_stop]
 
     # Save initial weights
     model.save_weights(os.path.join(OUTPUT_DIR, "init_weights.h5"))
@@ -84,6 +90,7 @@ if __name__ == "__main__":
     parser.add_argument("--ucr_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
+    parser.add_argument("--aug_each_epch", type=bool, help="Restart data aug after each epoch", defulat=True)
     parser.add_argument("--preproc", default="z_norm", choices=PREPROCESSINGS_NAMES, help="Method used to preprocess the data")
     parser.add_argument("--shuffle", type=bool, default=True, help="Shuffle data at the end of each epoch")
 

@@ -45,7 +45,7 @@ def get_aug_by_name(name):
 
 
 class SequenceDataAugmentation(Sequence):
-    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True):
+    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True, aug_data_each_epoch=True):
         self.x_train = x_train
         self.y_train = y_train
         self.batch_size = batch_size
@@ -84,12 +84,6 @@ class SequenceDataAugmentation(Sequence):
 
         self.x_train_aug = np.concatenate((self.x_train, aug_data), axis=0)
         self.y_train_aug = np.concatenate((self.y_train, self.y_train), axis=0)
-    
-        if self.shuffle:
-            # Shuffle data
-            p = np.random.permutation(len(self.x_train_aug))
-            self.x_train_aug = self.x_train_aug[p]
-            self.y_train_aug = self.y_train_aug[p]
 
     def __len__(self):
         return math.ceil(len(self.x_train_aug) / self.batch_size)
@@ -105,3 +99,9 @@ class SequenceDataAugmentation(Sequence):
             return
         # Augment data
         self.__augment_data()
+
+        # Shuffle data
+        if self.shuffle:
+            p = np.random.permutation(len(self.x_train_aug))
+            self.x_train_aug = self.x_train_aug[p]
+            self.y_train_aug = self.y_train_aug[p]

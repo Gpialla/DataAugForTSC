@@ -19,8 +19,8 @@ if curr_computer == Computer.MESOCTR:
 
 elif curr_computer == Computer.CASIMIR:
     # Path to datasets
-    PATH_UCR_ARCHIVE_2015 = "/home/pialla/Documents/UCRArchive_2015"
-    PATH_UCR_ARCHIVE_2018 = "/home/pialla/Documents/UCRArchive_2018"
+    PATH_UCR_ARCHIVE_2015 = "/home/pialla/Documents/Datasets/UCRArchive_2015"
+    PATH_UCR_ARCHIVE_2018 = "/home/pialla/Documents/Datasets/UCRArchive_2018"
 
     # Default output directory
     DEFAULT_OUTPUT_DIR = "/home/pialla/Documents/Results"
