@@ -49,6 +49,7 @@ class SequenceDataAugmentation(Sequence):
         self.x_train = x_train
         self.y_train = y_train
         self.batch_size = batch_size
+        self.aug_data_each_epoch = aug_data_each_epoch
 
         self.aug_methods = aug_methods
         if self.aug_methods is not None:
@@ -61,7 +62,6 @@ class SequenceDataAugmentation(Sequence):
             self.aug_methods = [get_aug_by_name(aug_name) for aug_name in self.aug_methods]
         
         self.shuffle = shuffle
-
         self.__augment_data()
 
     def __augment_data(self):
@@ -98,7 +98,8 @@ class SequenceDataAugmentation(Sequence):
         if self.aug_methods is None:
             return
         # Augment data
-        self.__augment_data()
+        if self.aug_data_each_epoch:
+            self.__augment_data()
 
         # Shuffle data
         if self.shuffle:
