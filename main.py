@@ -41,8 +41,8 @@ def training(args):
     PATH_BEST_WEIGHTS = os.path.join(OUTPUT_DIR, "best_weights.h5")
     model_checkpoint  = ModelCheckpoint(PATH_BEST_WEIGHTS, monitor='loss', save_best_only=True)
     reduce_lr         = ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=50, mode='auto', min_lr=1e-4)
-    early_stop        = EarlyStopping(monitor="loss", patience=100)
-    callbacks         = [model_checkpoint, reduce_lr, early_stop]
+    #early_stop        = EarlyStopping(monitor="loss", patience=100)
+    callbacks         = [model_checkpoint, reduce_lr] #, early_stop]
 
     # Save initial weights
     model.save_weights(os.path.join(OUTPUT_DIR, "init_weights.h5"))
