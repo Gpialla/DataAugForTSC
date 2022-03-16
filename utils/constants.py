@@ -8,9 +8,17 @@ class Computer(Enum):
     CASIMIR = 2
     HOME    = 3
 
-curr_computer = Computer.HOME
+curr_computer = Computer.UHA
 
-if curr_computer == Computer.MESOCTR:
+if curr_computer == Computer.UHA:
+    # Path to datasets
+    PATH_UCR_ARCHIVE_2015 = "/media/gautier/Data1/Datasets/UCRArchive_2015"
+    PATH_UCR_ARCHIVE_2018 = "/media/gautier/Data1/Datasets/UCRArchive_2018"
+
+    # Default output directory
+    DEFAULT_OUTPUT_DIR = "/media/gautier/Data1/Results"
+
+elif curr_computer == Computer.MESOCTR:
     # Path to datasets
     PATH_UCR_ARCHIVE_2015 = "/home2020/home/uha/gpialla/datasets/UCRArchive_2015"
     PATH_UCR_ARCHIVE_2018 = "/home2020/home/uha/gpialla/datasets/UCRArchive_2018"
