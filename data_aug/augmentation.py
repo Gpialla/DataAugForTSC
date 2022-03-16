@@ -311,7 +311,7 @@ def discriminative_guided_warp(x, y, batch_size=6, slope_constraint="symmetric",
         else:
             for i, pat in enumerate(ret):
                 # Variable Sllicing
-                ret[i] = window_slice(pat[np.newaxis,:,:], reduce_ratio=0.9+0.1*warp_amount[i]/max_warp)[0]
+                ret[i] = window_slice(pat[np.newaxis,:,:], None, reduce_ratio=0.9+0.1*warp_amount[i]/max_warp)[0]
     return ret
 
 def discriminative_guided_warp_shape(x, y, batch_size=6, slope_constraint="symmetric", use_window=True):
