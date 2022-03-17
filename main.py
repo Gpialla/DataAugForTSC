@@ -25,12 +25,15 @@ def training(args):
     x_train, x_test = preproc(x_train, x_test)
     y_train, y_test, n_classes, _ = labels_encoding(y_train, y_test, format="OHE")
     
+    print(args.aug_each_epch)
+    print(args.shuffle)
+    exit()
     # Load data as sequence
     seq_data = SequenceDataAugmentation(
         x_train, y_train, 
         args.batch_size, 
         aug_methods=args.aug_method, 
-        aug_data_each_epoch=args.aug_each_epch, 
+        aug_each_epoch=args.aug_each_epch, 
         shuffle=args.shuffle
     )
 
@@ -90,10 +93,9 @@ if __name__ == "__main__":
     parser.add_argument("--ucr_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
-    parser.add_argument("--aug_each_epch", type=bool, help="Restart data aug after each epoch", default=True)
+    parser.add_argument("--aug_each_epch", choices=('True', 'False'), default='True', help="New data aug after each epoch")   
     parser.add_argument("--preproc", default="z_norm", choices=PREPROCESSINGS_NAMES, help="Method used to preprocess the data")
-    parser.add_argument("--shuffle", type=bool, default=True, help="Shuffle data at the end of each epoch")
-
+    parser.add_argument("--shuffle", choices=('True', 'False'), default='True', help="Shuffle data at the end of each epoch")
     # Args for directories
     parser.add_argument("--output_dir", default=DEFAULT_OUTPUT_DIR)
 
@@ -107,4 +109,6 @@ if __name__ == "__main__":
     parser.add_argument("--iter", type=int, default=0, help="The iteration index")
     args = parser.parse_args()
 
+    args.aug_each_epch = args.aug_each_epch == 'True'
+    args.shuffle       = args.shuffle       == 'True'
     training(args)

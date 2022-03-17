@@ -45,11 +45,11 @@ def get_aug_by_name(name):
 
 
 class SequenceDataAugmentation(Sequence):
-    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True, aug_data_each_epoch=True):
+    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True, aug_each_epoch=True):
         self.x_train = x_train
         self.y_train = y_train
         self.batch_size = batch_size
-        self.aug_data_each_epoch = aug_data_each_epoch
+        self.aug_each_epoch = aug_each_epoch
 
         self.aug_methods = aug_methods
         if self.aug_methods is not None:
@@ -98,7 +98,7 @@ class SequenceDataAugmentation(Sequence):
         if self.aug_methods is None:
             return
         # Augment data
-        if self.aug_data_each_epoch:
+        if self.aug_each_epoch:
             self.__augment_data()
 
         # Shuffle data
