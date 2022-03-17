@@ -25,9 +25,6 @@ def training(args):
     x_train, x_test = preproc(x_train, x_test)
     y_train, y_test, n_classes, _ = labels_encoding(y_train, y_test, format="OHE")
     
-    print(args.aug_each_epch)
-    print(args.shuffle)
-    exit()
     # Load data as sequence
     seq_data = SequenceDataAugmentation(
         x_train, y_train, 
