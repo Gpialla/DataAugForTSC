@@ -11,7 +11,7 @@ DS_2018 = [
 AUG_METHODS = ["scaling", "windowwarp", "dgw", "rgw"]
 AUG_EACH_EPCH = True
 MULTI_AUG     = False
-EXP_NAME = "TrainOneAug_NotEachEpch"
+EXP_NAME = "TrainOneAug_AugEachEpch"
 NUM_ITR = 5
 CLSSF_NAME = "inception"
 
@@ -25,10 +25,10 @@ for ds_name in DS_2018:
             for itr in range(NUM_ITR):
                 command = "python3 main.py --exp_name {} --ds_name {} --aug_method {} --aug_each_epch {} --model {} --num_epochs {} --batch_size {} --iter {}".format(EXP_NAME, ds_name, aug, AUG_EACH_EPCH, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
                 print("Run command " + command)
-                path_log = "%s_%s_%i"%(aug, ds_name, itr)
+                path_log = "./logs_%s_%s_%i"%(aug, ds_name, itr)
                 print("outputs in: " + path_log)
                 with open(path_log, "w") as f:
-                    p = subprocess.run(command, stdout=f)
+                    p = subprocess.run(command, shell=True, stdout=f)
                 print("Return code ", p.returncode)
     else:
         # Several aug at the time
