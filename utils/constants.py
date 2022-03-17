@@ -7,8 +7,8 @@ class Computer(Enum):
     MESOCTR = 1
     CASIMIR = 2
     HOME    = 3
-
-curr_computer = Computer.HOME
+    APOPHIS = 4
+curr_computer = Computer.APOPHIS
 
 if curr_computer == Computer.MESOCTR:
     # Path to datasets
@@ -33,4 +33,11 @@ elif curr_computer == Computer.HOME:
 
     # Default output directory
     DEFAULT_OUTPUT_DIR = "/media/gautier/Data1/Datasets/Results"
-    
+
+elif curr_computer == Computer.APOPHIS:
+    # Path to datasets
+    PATH_UCR_ARCHIVE_2015 = "/home/gpialla/Datasets/UCRArchive_2015"
+    PATH_UCR_ARCHIVE_2018 = "/home/gpialla/Datasets/UCRArchive_2018"
+
+    # Default output directory
+    DEFAULT_OUTPUT_DIR = "/home/gpialla/Results"
