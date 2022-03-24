@@ -16,7 +16,20 @@ from data.helper import load_ucr_dataset, get_preprocessing_by_name
 from utils.constants import DEFAULT_OUTPUT_DIR
 from utils.utils import create_dir_if_not_exists, save_keras_history, save_predictions, save_records
 
+def print_summary_exp(args):
+    print()
+    print(" --- Summary exp ---")
+    print("Exp name        :", args.exp_name)
+    print("Num itr         :", args.iter)
+    print("Model           :", args.model)
+    print("Num Epochs      :", args.num_epochs)
+    print("Aug Methods     :", args.aug_method)
+    print("Multi aug method:", args.multi_aug_method)
+    print("Only aug data   :", args.only_aug_data)
+    print()
+
 def training(args):
+    print_summary_exp(args)
 
     # Load data
     x_train, y_train, x_test, y_test = load_ucr_dataset(args.ds_name, args.ucr_version)
@@ -24,8 +37,7 @@ def training(args):
     preproc = get_preprocessing_by_name(args.preproc)
     x_train, x_test = preproc(x_train, x_test)
     y_train, y_test, n_classes, _ = labels_encoding(y_train, y_test, format="OHE")
-
-    print("-------->", args["aug_each_epch"])    
+ 
     # Load data as sequence
     seq_data = SequenceDataAugmentation(
         x_train, y_train, 
