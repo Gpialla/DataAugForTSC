@@ -8,7 +8,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, Early
 
 from models.helper import MODEL_LIST, get_model_by_name
 
-from data_aug.helper import AUG_METHODS, get_aug_by_name, SequenceDataAugmentation
+from data_aug.helper import AUG_METHODS, get_aug_by_name, SequenceDataAugmentation, MultiAugMethod
 from data.helper import PREPROCESSINGS_NAMES
 from data.data_preprocessing import labels_encoding
 from data.helper import load_ucr_dataset, get_preprocessing_by_name
@@ -24,13 +24,15 @@ def training(args):
     preproc = get_preprocessing_by_name(args.preproc)
     x_train, x_test = preproc(x_train, x_test)
     y_train, y_test, n_classes, _ = labels_encoding(y_train, y_test, format="OHE")
-    
+
+    print("-------->", args["aug_each_epch"])    
     # Load data as sequence
     seq_data = SequenceDataAugmentation(
         x_train, y_train, 
         args.batch_size, 
         aug_methods=args.aug_method, 
         aug_data_each_epoch=args.aug_each_epch, 
+        multi_aug_method=args.multi_aug_method,
         shuffle=args.shuffle
     )
 
@@ -90,7 +92,8 @@ if __name__ == "__main__":
     parser.add_argument("--ucr_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
-    parser.add_argument("--aug_each_epch", type=bool, help="Restart data aug after each epoch", default=True)
+    parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'), nargs='+')
+    parser.add_argument("--aug_each_epch", type=bool, default=False, help="Restart data aug after each epoch")
     parser.add_argument("--preproc", default="z_norm", choices=PREPROCESSINGS_NAMES, help="Method used to preprocess the data")
     parser.add_argument("--shuffle", type=bool, default=True, help="Shuffle data at the end of each epoch")
 
@@ -107,4 +110,10 @@ if __name__ == "__main__":
     parser.add_argument("--iter", type=int, default=0, help="The iteration index")
     args = parser.parse_args()
 
+    # Converting param to Enum value
+    if args.multi_aug_method == 'MULTI':
+        args.multi_aug_method == MultiAugMethod.MULTI
+    elif args.multi_aug_method == 'MIXED':
+        args.multi_aug_method == MultiAugMethod.MIXED
+    
     training(args)

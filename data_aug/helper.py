@@ -1,3 +1,4 @@
+from enum import Enum
 import math
 import random
 
@@ -43,21 +44,26 @@ def get_aug_by_name(name):
             Valid methods are: [%s]" % (name, str(AUG_METHODS.keys())))
     return AUG_METHODS[name]
 
+class MultiAugMethod(Enum):
+    MULTI  = 1 # Several 
+    MIXED  = 2 # Several 
+
 
 class SequenceDataAugmentation(Sequence):
-    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True, aug_data_each_epoch=True):
+    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True, aug_data_each_epoch=True, multi_aug_method=MultiAugMethod.MULTI):
         self.x_train = x_train
         self.y_train = y_train
         self.batch_size = batch_size
         self.aug_data_each_epoch = aug_data_each_epoch
+        self.multi_aug_method = multi_aug_method
 
         self.aug_methods = aug_methods
         if self.aug_methods is not None:
             # Check if several data aug
             if len(self.aug_methods) > 1:
-                self.multi = True
+                self.is_multi_aug = True
             else:
-                self.multi = False
+                self.is_multi_aug = False
             # Load aug methods
             self.aug_methods = [get_aug_by_name(aug_name) for aug_name in self.aug_methods]
         
@@ -72,19 +78,41 @@ class SequenceDataAugmentation(Sequence):
             self.y_train_aug = self.y_train
             return
 
-        # Augment data
-        # - split indices in n groups, with n number of data augs
-        aug_data = np.zeros(self.x_train.shape)
-        list_idx = list(range(len(aug_data)))
-        random.shuffle(list_idx)    # Shuffle list
-        groups_idx = split_list_in_groups(list_idx, len(self.aug_methods))
-        # - Generate data aug for each group
-        for group_idx, aug_method in zip(groups_idx, self.aug_methods):
-            aug_data[group_idx] = aug_method(self.x_train[group_idx], self.y_train[group_idx])
+        if not self.is_multi_aug:
+            # Using only one aug method
+            aug_method = self.aug_methods[0]
+            aug_data = aug_method(self.x_train, self.y_train)
+            self.x_train_aug = np.concatenate((self.x_train, aug_data), axis=0)
+            self.y_train_aug = np.concatenate((self.y_train, self.y_train), axis=0)
 
-        self.x_train_aug = np.concatenate((self.x_train, aug_data), axis=0)
-        self.y_train_aug = np.concatenate((self.y_train, self.y_train), axis=0)
+        elif self.multi_aug_method == MultiAugMethod.MIXED:
+            # Augment data: Mixing randomly each aug method
 
+            # - split indices in n groups, with n number of data augs
+            aug_data = np.zeros(self.x_train.shape)
+            list_idx = list(range(len(aug_data)))
+            random.shuffle(list_idx)    # Shuffle list
+            groups_idx = split_list_in_groups(list_idx, len(self.aug_methods))
+            # - Generate data aug for each group
+            for group_idx, aug_method in zip(groups_idx, self.aug_methods):
+                aug_data[group_idx] = aug_method(self.x_train[group_idx], self.y_train[group_idx])
+
+            self.x_train_aug = np.concatenate((self.x_train, aug_data), axis=0)
+            self.y_train_aug = np.concatenate((self.y_train, self.y_train), axis=0)
+
+        elif self.multi_aug_method == MultiAugMethod.MULTI:
+            # Append each data aug after another
+            self.x_train_aug = self.x_train.copy()
+            self.y_train_aug = self.y_train.copy()
+            # - Generate data aug for each method
+            for aug_method in self.aug_methods:
+                aug_data = aug_method(self.x_train, self.y_train)
+                self.x_train_aug = np.concatenate((self.x_train_aug, aug_data), axis=0)
+                self.y_train_aug = np.concatenate((self.y_train_aug, self.y_train), axis=0)
+
+        else:
+            raise ValueError("Not implemented!")
+        
     def __len__(self):
         return math.ceil(len(self.x_train_aug) / self.batch_size)
 

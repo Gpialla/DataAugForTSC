@@ -8,12 +8,14 @@ DS_2018 = [
 	'CricketY', 'CricketZ', 'Crop', 'DiatomSizeReduction'
 ]
 
-AUG_METHODS = ["scaling", "windowwarp", "dgw", "rgw"]
+DS_2018 = ['ACSF1']
+
+AUG_METHODS   = ["scaling", "windowwarp", "dgw", "rgw"]
 AUG_EACH_EPCH = False
-MULTI_AUG = True
-EXP_NAME = "TrainMultiAug"
-NUM_ITR = 5
-CLSSF_NAME = "inception"
+MULTI_AUG     = True
+EXP_NAME      = "TrainMultiAug"
+NUM_ITR       = 5
+CLSSF_NAME    = "inception"
 
 
 EPOCHS      = 900
