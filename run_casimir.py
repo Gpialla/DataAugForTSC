@@ -42,7 +42,7 @@ for ds_name in DS_2018:
 
         for itr in range(NUM_ITR):
             command = "python3 main.py --exp_name {} --ds_name {} \
-                    --aug_method {} --aug_each_epch {} --multi_aug_method\
+                    --aug_method {} --aug_each_epch {} --multi_aug_method {}\
                     --model {} --num_epochs {} --batch_size {} --iter {}"\
                     .format(EXP_NAME, ds_name, aug_str, AUG_EACH_EPCH, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
             print("Run command " + command)
