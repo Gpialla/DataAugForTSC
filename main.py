@@ -31,8 +31,9 @@ def training(args):
         x_train, y_train, 
         args.batch_size, 
         aug_methods=args.aug_method, 
-        aug_data_each_epoch=args.aug_each_epch, 
+        aug_each_epoch=args.aug_each_epch, 
         multi_aug_method=args.multi_aug_method,
+        only_aug_data=args.only_aug_data,
         shuffle=args.shuffle
     )
 
@@ -93,10 +94,10 @@ if __name__ == "__main__":
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
     parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'), nargs='+')
-    parser.add_argument("--aug_each_epch", type=bool, default=False, help="Restart data aug after each epoch")
+    parser.add_argument("--aug_each_epch", choices=('True', 'False'), default='True', help="New data aug after each epoch")
+    parser.add_argument("--only_data_aug", choices=('True', 'False'), default='False', help="Use only augmented data")   
     parser.add_argument("--preproc", default="z_norm", choices=PREPROCESSINGS_NAMES, help="Method used to preprocess the data")
-    parser.add_argument("--shuffle", type=bool, default=True, help="Shuffle data at the end of each epoch")
-
+    parser.add_argument("--shuffle", choices=('True', 'False'), default='True', help="Shuffle data at the end of each epoch")
     # Args for directories
     parser.add_argument("--output_dir", default=DEFAULT_OUTPUT_DIR)
 
@@ -116,4 +117,9 @@ if __name__ == "__main__":
     elif args.multi_aug_method == 'MIXED':
         args.multi_aug_method == MultiAugMethod.MIXED
     
+    # Handling text to boolean
+    args.aug_each_epch = args.aug_each_epch == 'True'
+    args.only_data_aug = args.only_data_aug == 'True'
+    args.shuffle       = args.shuffle       == 'True'
+
     training(args)

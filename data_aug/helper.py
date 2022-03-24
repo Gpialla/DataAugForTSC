@@ -50,12 +50,22 @@ class MultiAugMethod(Enum):
 
 
 class SequenceDataAugmentation(Sequence):
-    def __init__(self, x_train, y_train, batch_size, aug_methods=None, shuffle=True, aug_data_each_epoch=True, multi_aug_method=MultiAugMethod.MULTI):
+    def __init__(self, x_train, y_train, batch_size, 
+                only_aug_data=False, # If we use only augmented data
+                aug_methods=None,    # One or several augmentation methods
+                shuffle=True,        # If we shuffle tha data for each epoch
+                aug_each_epoch=True, # If we generate new augmented data at each epoch
+                multi_aug_method=MultiAugMethod.MULTI
+        ):
         self.x_train = x_train
         self.y_train = y_train
         self.batch_size = batch_size
-        self.aug_data_each_epoch = aug_data_each_epoch
+        self.aug_each_epoch = aug_each_epoch
         self.multi_aug_method = multi_aug_method
+        self.only_aug_data = only_aug_data
+
+        if only_aug_data and aug_methods is None:
+            raise ValueError("Can't use only augmented data but no augmentation method!")
 
         self.aug_methods = aug_methods
         if self.aug_methods is not None:
@@ -82,8 +92,12 @@ class SequenceDataAugmentation(Sequence):
             # Using only one aug method
             aug_method = self.aug_methods[0]
             aug_data = aug_method(self.x_train, self.y_train)
-            self.x_train_aug = np.concatenate((self.x_train, aug_data), axis=0)
-            self.y_train_aug = np.concatenate((self.y_train, self.y_train), axis=0)
+            if self.only_aug_data:
+                self.x_train_aug = aug_data
+                self.y_train_aug = self.y_train.copy()
+            else:
+                self.x_train_aug = np.concatenate((self.x_train.copy(), aug_data), axis=0)
+                self.y_train_aug = np.concatenate((self.y_train.copy(), self.y_train), axis=0)
 
         elif self.multi_aug_method == MultiAugMethod.MIXED:
             # Augment data: Mixing randomly each aug method
@@ -97,19 +111,26 @@ class SequenceDataAugmentation(Sequence):
             for group_idx, aug_method in zip(groups_idx, self.aug_methods):
                 aug_data[group_idx] = aug_method(self.x_train[group_idx], self.y_train[group_idx])
 
-            self.x_train_aug = np.concatenate((self.x_train, aug_data), axis=0)
-            self.y_train_aug = np.concatenate((self.y_train, self.y_train), axis=0)
+            if self.only_aug_data:
+                self.x_train_aug = aug_data
+                self.y_train_aug = self.y_train.copy()
+            else:
+                self.x_train_aug = np.concatenate((self.x_train.copy(), aug_data), axis=0)
+                self.y_train_aug = np.concatenate((self.y_train.copy(), self.y_train), axis=0)
 
         elif self.multi_aug_method == MultiAugMethod.MULTI:
             # Append each data aug after another
-            self.x_train_aug = self.x_train.copy()
-            self.y_train_aug = self.y_train.copy()
+            if self.only_aug_data:
+                self.x_train_aug = np.array()
+                self.y_train_aug = np.array()
+            else:
+                self.x_train_aug = self.x_train.copy()
+                self.y_train_aug = self.y_train.copy()
             # - Generate data aug for each method
             for aug_method in self.aug_methods:
                 aug_data = aug_method(self.x_train, self.y_train)
                 self.x_train_aug = np.concatenate((self.x_train_aug, aug_data), axis=0)
                 self.y_train_aug = np.concatenate((self.y_train_aug, self.y_train), axis=0)
-
         else:
             raise ValueError("Not implemented!")
         
@@ -126,7 +147,7 @@ class SequenceDataAugmentation(Sequence):
         if self.aug_methods is None:
             return
         # Augment data
-        if self.aug_data_each_epoch:
+        if self.aug_each_epoch:
             self.__augment_data()
 
         # Shuffle data

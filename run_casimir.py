@@ -8,15 +8,14 @@ DS_2018 = [
 	'CricketY', 'CricketZ', 'Crop', 'DiatomSizeReduction'
 ]
 
-DS_2018 = ['ACSF1']
-
-AUG_METHODS   = ["scaling", "windowwarp", "dgw", "rgw"]
-AUG_EACH_EPCH = False
-MULTI_AUG     = True
-EXP_NAME      = "TrainMultiAug"
-NUM_ITR       = 5
-CLSSF_NAME    = "inception"
-
+AUG_METHODS      = ["scaling", "windowwarp", "dgw", "rgw"]
+AUG_EACH_EPCH    = True
+MULTI_AUG        = False
+MULTI_AUG_METHOD = 'MULTI'
+ONLY_AUG_DATA    = False
+EXP_NAME = "TrainMultiAug_NoAugEachEpch"
+NUM_ITR = 5
+CLSSF_NAME = "inception"
 
 EPOCHS      = 900
 BATCH_SIZE  = 64
@@ -25,9 +24,15 @@ for ds_name in DS_2018:
     if not MULTI_AUG:
         for aug in AUG_METHODS:
             for itr in range(NUM_ITR):
-                command = "python3 main.py --exp_name {} --ds_name {} --aug_method {} --aug_each_epch {} --model {} --num_epochs {} --batch_size {} --iter {}".format(EXP_NAME, ds_name, aug, AUG_EACH_EPCH, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+                command = "python3 main.py --exp_name {} --ds_name {} \
+                        --aug_method {} --aug_each_epch {}\
+                        --model {} --num_epochs {} --batch_size {} --iter {}"\
+                        .format(EXP_NAME, ds_name, aug, AUG_EACH_EPCH, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
                 print("Run command " + command)
-                p = subprocess.run(command, shell=True)
+                path_log = "./logs_%s_%s_%i"%(aug, ds_name, itr)
+                print("outputs in: " + path_log)
+                with open(path_log, "w") as f:
+                    p = subprocess.run(command, shell=True, stdout=f)
                 print("Return code ", p.returncode)
     else:
         # Several aug at the time
@@ -36,7 +41,10 @@ for ds_name in DS_2018:
         aug_str=aug_str[:-1]
 
         for itr in range(NUM_ITR):
-            command = "python3 main.py --exp_name {} --ds_name {} --aug_method {} --aug_each_epch {} --model {} --num_epochs {} --batch_size {} --iter {}".format(EXP_NAME, ds_name, aug_str, AUG_EACH_EPCH, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+            command = "python3 main.py --exp_name {} --ds_name {} \
+                    --aug_method {} --aug_each_epch {} --multi_aug_method\
+                    --model {} --num_epochs {} --batch_size {} --iter {}"\
+                    .format(EXP_NAME, ds_name, aug_str, AUG_EACH_EPCH, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
             print("Run command " + command)
             p = subprocess.run(command, shell=True)
             print("Return code ", p.returncode)
