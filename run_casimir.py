@@ -25,9 +25,9 @@ for ds_name in DS_2018:
         for aug in AUG_METHODS:
             for itr in range(NUM_ITR):
                 command = "python3 main.py --exp_name {} --ds_name {} \
-                        --aug_method {} --aug_each_epch {}\
+                        --aug_method {} --aug_each_epch {} --only_aug_data {}\
                         --model {} --num_epochs {} --batch_size {} --iter {}"\
-                        .format(EXP_NAME, ds_name, aug, AUG_EACH_EPCH, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+                        .format(EXP_NAME, ds_name, aug, AUG_EACH_EPCH, ONLY_AUG_DATA, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
                 print("Run command " + command)
                 path_log = "./logs_%s_%s_%i"%(aug, ds_name, itr)
                 print("outputs in: " + path_log)
@@ -42,9 +42,9 @@ for ds_name in DS_2018:
 
         for itr in range(NUM_ITR):
             command = "python3 main.py --exp_name {} --ds_name {} \
-                    --aug_method {} --aug_each_epch {} --multi_aug_method {}\
+                    --aug_method {} --aug_each_epch {} --only_aug_data {} --multi_aug_method {}\
                     --model {} --num_epochs {} --batch_size {} --iter {}"\
-                    .format(EXP_NAME, ds_name, aug_str, AUG_EACH_EPCH, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+                    .format(EXP_NAME, ds_name, aug_str, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
             print("Run command " + command)
             p = subprocess.run(command, shell=True)
             print("Return code ", p.returncode)

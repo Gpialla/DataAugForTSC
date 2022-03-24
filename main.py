@@ -105,9 +105,9 @@ if __name__ == "__main__":
     parser.add_argument("--ucr_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
-    parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'), nargs='+')
+    parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'))
     parser.add_argument("--aug_each_epch", choices=('True', 'False'), default='True', help="New data aug after each epoch")
-    parser.add_argument("--only_data_aug", choices=('True', 'False'), default='False', help="Use only augmented data")   
+    parser.add_argument("--only_aug_data", choices=('True', 'False'), default='False', help="Use only augmented data")   
     parser.add_argument("--preproc", default="z_norm", choices=PREPROCESSINGS_NAMES, help="Method used to preprocess the data")
     parser.add_argument("--shuffle", choices=('True', 'False'), default='True', help="Shuffle data at the end of each epoch")
     # Args for directories
@@ -131,7 +131,7 @@ if __name__ == "__main__":
     
     # Handling text to boolean
     args.aug_each_epch = args.aug_each_epch == 'True'
-    args.only_data_aug = args.only_data_aug == 'True'
+    args.only_aug_data = args.only_aug_data == 'True'
     args.shuffle       = args.shuffle       == 'True'
 
     training(args)
