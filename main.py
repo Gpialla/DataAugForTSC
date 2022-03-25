@@ -125,9 +125,9 @@ if __name__ == "__main__":
 
     # Converting param to Enum value
     if args.multi_aug_method == 'MULTI':
-        args.multi_aug_method == MultiAugMethod.MULTI
+        args.multi_aug_method = MultiAugMethod.MULTI
     elif args.multi_aug_method == 'MIXED':
-        args.multi_aug_method == MultiAugMethod.MIXED
+        args.multi_aug_method = MultiAugMethod.MIXED
     
     # Handling text to boolean
     args.aug_each_epch = args.aug_each_epch == 'True'

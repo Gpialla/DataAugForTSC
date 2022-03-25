@@ -1,6 +1,41 @@
 import os
 import subprocess
 
+UCR_DATASETS_2018 = [
+    'ACSF1', 'Adiac', 'AllGestureWiimoteX', 'AllGestureWiimoteY', 'AllGestureWiimoteZ',
+    'ArrowHead', 'Beef', 'BeetleFly', 'BirdChicken', 'BME', 'Car', 'CBF', 'Chinatown',
+    'ChlorineConcentration', 'CinCECGTorso', 'Coffee', 'Computers', 'CricketX',
+    'CricketY', 'CricketZ', 'Crop', 'DiatomSizeReduction',
+    'DistalPhalanxOutlineAgeGroup', 'DistalPhalanxOutlineCorrect', 'DistalPhalanxTW',
+    'DodgerLoopDay', 'DodgerLoopGame', 'DodgerLoopWeekend', 'Earthquakes', 'ECG200',
+    'ECG5000', 'ECGFiveDays', 'ElectricDevices', 'EOGHorizontalSignal',
+    'EOGVerticalSignal', 'EthanolLevel', 'FaceAll', 'FaceFour', 'FacesUCR',
+    'FiftyWords', 'Fish', 'FordA', 'FordB', 'FreezerRegularTrain',
+    'FreezerSmallTrain', 'Fungi', 'GestureMidAirD1', 'GestureMidAirD2',
+    'GestureMidAirD3', 'GesturePebbleZ1', 'GesturePebbleZ2', 'GunPoint',
+    'GunPointAgeSpan', 'GunPointMaleVersusFemale', 'GunPointOldVersusYoung',
+    'Ham', 'HandOutlines', 'Haptics', 'Herring', 'HouseTwenty', 'InlineSkate',
+    'InsectEPGRegularTrain', 'InsectEPGSmallTrain', 'InsectWingbeatSound',
+    'ItalyPowerDemand', 'LargeKitchenAppliances', 'Lightning2', 'Lightning7',
+    'Mallat', 'Meat', 'MedicalImages', 'MelbournePedestrian',
+    'MiddlePhalanxOutlineAgeGroup', 'MiddlePhalanxOutlineCorrect',
+    'MiddlePhalanxTW', 'MixedShapesRegularTrain', 'MixedShapesSmallTrain',
+    'MoteStrain', 'NonInvasiveFetalECGThorax1', 'NonInvasiveFetalECGThorax2',
+    'OliveOil', 'OSULeaf', 'PhalangesOutlinesCorrect', 'Phoneme',
+    'PickupGestureWiimoteZ', 'PigAirwayPressure', 'PigArtPressure', 'PigCVP',
+    'PLAID', 'Plane', 'PowerCons', 'ProximalPhalanxOutlineAgeGroup',
+    'ProximalPhalanxOutlineCorrect', 'ProximalPhalanxTW', 'RefrigerationDevices',
+    'Rock', 'ScreenType', 'SemgHandGenderCh2', 'SemgHandMovementCh2',
+    'SemgHandSubjectCh2', 'ShakeGestureWiimoteZ', 'ShapeletSim', 'ShapesAll',
+    'SmallKitchenAppliances', 'SmoothSubspace', 'SonyAIBORobotSurface1',
+    'SonyAIBORobotSurface2', 'StarLightCurves', 'Strawberry', 'SwedishLeaf',
+    'Symbols', 'SyntheticControl', 'ToeSegmentation1', 'ToeSegmentation2', 'Trace',
+    'TwoLeadECG', 'TwoPatterns', 'UMD', 'UWaveGestureLibraryAll',
+    'UWaveGestureLibraryX', 'UWaveGestureLibraryY', 'UWaveGestureLibraryZ',
+    'Wafer', 'Wine', 'WordSynonyms', 'Worms', 'WormsTwoClass', 'Yoga'
+]
+
+
 DS_2018 = [
 	'ACSF1', 'Adiac', 'AllGestureWiimoteX', 'AllGestureWiimoteY', 'AllGestureWiimoteZ',
 	'ArrowHead', 'Beef', 'BeetleFly', 'BirdChicken', 'BME', 'Car', 'CBF', 'Chinatown',
@@ -8,19 +43,19 @@ DS_2018 = [
 	'CricketY', 'CricketZ', 'Crop', 'DiatomSizeReduction'
 ]
 
-AUG_METHODS      = ["scaling", "windowwarp", "dgw", "rgw"]
-AUG_EACH_EPCH    = True
-MULTI_AUG        = False
+AUG_METHODS      = ["scaling", "windowwarp"]
+AUG_EACH_EPCH    = False
+MULTI_AUG        = True
 MULTI_AUG_METHOD = 'MULTI'
 ONLY_AUG_DATA    = False
-EXP_NAME = "TrainMultiAug_NoAugEachEpch"
+EXP_NAME = "Multi_NoAEE_NoOAD"
 NUM_ITR = 5
 CLSSF_NAME = "inception"
 
 EPOCHS      = 900
 BATCH_SIZE  = 64
 
-for ds_name in DS_2018:
+for ds_name in UCR_DATASETS_2018:
     if not MULTI_AUG:
         for aug in AUG_METHODS:
             for itr in range(NUM_ITR):
@@ -31,8 +66,8 @@ for ds_name in DS_2018:
                 print("Run command " + command)
                 path_log = "./logs_%s_%s_%i"%(aug, ds_name, itr)
                 print("outputs in: " + path_log)
-                with open(path_log, "w") as f:
-                    p = subprocess.run(command, shell=True, stdout=f)
+                #with open(path_log, "w") as f:
+                p = subprocess.run(command, shell=True) #, stdout=f)
                 print("Return code ", p.returncode)
     else:
         # Several aug at the time
