@@ -66,8 +66,8 @@ for ds_name in UCR_DATASETS_2018:
                 print("Run command " + command)
                 path_log = "./logs_%s_%s_%i"%(aug, ds_name, itr)
                 print("outputs in: " + path_log)
-                #with open(path_log, "w") as f:
-                p = subprocess.run(command, shell=True) #, stdout=f)
+                with open(path_log, "w") as f:
+                    p = subprocess.run(command, shell=True, stdout=f)
                 print("Return code ", p.returncode)
     else:
         # Several aug at the time
