@@ -1,4 +1,5 @@
 from enum import Enum
+from unittest.main import MAIN_EXAMPLES
 
 class Computer(Enum):
     UHA     = 0
@@ -6,8 +7,9 @@ class Computer(Enum):
     CASIMIR = 2
     HOME    = 3
     APOPHIS = 4
+    MAXIME  = 5
 
-curr_computer = Computer.APOPHIS
+curr_computer = Computer.MAXIME
 
 if curr_computer == Computer.UHA:
     # Path to datasets
@@ -42,6 +44,14 @@ elif curr_computer == Computer.HOME:
     DEFAULT_OUTPUT_DIR = "/media/gautier/Data1/Datasets/Results"
 
 elif curr_computer == Computer.APOPHIS:
+    # Path to datasets
+    PATH_UCR_ARCHIVE_2015 = "/home/gpialla/Datasets/UCRArchive_2015"
+    PATH_UCR_ARCHIVE_2018 = "/home/gpialla/Datasets/UCRArchive_2018"
+
+    # Default output directory
+    DEFAULT_OUTPUT_DIR = "/home/gpialla/Results"
+
+elif curr_computer == Computer.MAXIME:
     # Path to datasets
     PATH_UCR_ARCHIVE_2015 = "/home/gpialla/Datasets/UCRArchive_2015"
     PATH_UCR_ARCHIVE_2018 = "/home/gpialla/Datasets/UCRArchive_2018"
