@@ -1,7 +1,6 @@
 import argparse
 import os
 import time
-from tracemalloc import start
 
 import tensorflow as tf
 from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
@@ -80,15 +79,14 @@ def training(args):
 
     # Make predictions using best model
     model = tf.keras.models.load_model(PATH_BEST_WEIGHTS)
-    start_time = time.time()
-    y_pred_train = model.predict(x_train)
-    y_pred_test  = model.predict(x_test)
-    pred_time = time.time() - start_time
+    start_time = time.time(); y_pred_train = model.predict(x_train); inf_time_train = time.time() - start_time
+    start_time = time.time(); y_pred_test  = model.predict(x_test);  inf_time_test  = time.time() - start_time
     
     # Recordings
     records = dict()
     records["training_time"] = training_time
-    records["pred_time"]     = pred_time
+    records["inf_time_train"]= inf_time_train
+    records["inf_time_test"] = inf_time_test
     records["train_acc"]     = tf.keras.metrics.categorical_accuracy(y_test, y_pred_train).numpy().mean()
     records["train_loss"]    = tf.keras.metrics.get(args.loss)(y_test, y_pred_train).numpy().mean()
     records["test_acc"]      = tf.keras.metrics.categorical_accuracy(y_test, y_pred_test).numpy().mean()
