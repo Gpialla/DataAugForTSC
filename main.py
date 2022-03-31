@@ -81,19 +81,23 @@ def training(args):
     # Make predictions using best model
     model = tf.keras.models.load_model(PATH_BEST_WEIGHTS)
     start_time = time.time()
-    y_pred = model.predict(x_test)
+    y_pred_train = model.predict(x_train)
+    y_pred_test  = model.predict(x_test)
     pred_time = time.time() - start_time
     
     # Recordings
     records = dict()
     records["training_time"] = training_time
-    records["pred_time"]    = pred_time
-    records["test_acc"]     = tf.keras.metrics.categorical_accuracy(y_test, y_pred).numpy().mean()
-    records["test_loss"]    = tf.keras.metrics.get(args.loss)(y_test, y_pred).numpy().mean()
+    records["pred_time"]     = pred_time
+    records["train_acc"]     = tf.keras.metrics.categorical_accuracy(y_test, y_pred_train).numpy().mean()
+    records["train_loss"]    = tf.keras.metrics.get(args.loss)(y_test, y_pred_train).numpy().mean()
+    records["test_acc"]      = tf.keras.metrics.categorical_accuracy(y_test, y_pred_test).numpy().mean()
+    records["test_loss"]     = tf.keras.metrics.get(args.loss)(y_test, y_pred_test).numpy().mean()
 
     # Save recordings
     save_keras_history(history, os.path.join(OUTPUT_DIR, "history.csv"))
-    save_predictions(y_pred, os.path.join(OUTPUT_DIR, "y_preds.npy"))
+    save_predictions(y_pred_train, os.path.join(OUTPUT_DIR, "y_preds_train.npy"))
+    save_predictions(y_pred_test,  os.path.join(OUTPUT_DIR, "y_preds_test.npy"))
     save_records(records, os.path.join(OUTPUT_DIR, "records.json"))
 
 
