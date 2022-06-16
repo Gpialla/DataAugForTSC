@@ -1,1 +1,1 @@
-# TimeSeriesClassification
+# Data Augmentation for TSC
