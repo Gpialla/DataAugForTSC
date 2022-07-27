@@ -41,7 +41,7 @@ This work is not published yet.
 
 ## Acknowledgments
 This work was funded by ArtIC project ”Artificial Intelligence for Care” (grant
-ANR-20-THIA-0006-01) and co-funded by R ́egion Grand Est, Inria Nancy -
+ANR-20-THIA-0006-01) and co-funded by Région Grand Est, Inria Nancy -
 Grand Est, IHU of Strasbourg, University of Strasbourg and University of Haute-
 Alsace. 
 
