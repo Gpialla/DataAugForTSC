@@ -46,4 +46,4 @@ Grand Est, IHU of Strasbourg, University of Strasbourg and University of Haute-
 Alsace. 
 
 The authors would like to thank the providers of the UCR archive as
-well as the M ́esocentre of Strasbourg for providing access to the GPU cluster.
+well as the Mésocentre of Strasbourg for providing access to the GPU cluster.
