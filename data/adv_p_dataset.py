@@ -1,7 +1,6 @@
 # Imports
 import os
 import numpy as np
-from run_mesocentre import DS_VERSIONS
 
 from utils.constants import PATH_ADV_P
 from data.ucr_archive import UCR_ARCHIVE_2018_DATASETS
