@@ -54,6 +54,6 @@ for ds_name in DS_2018:
     if not MULTI_AUG:
         for archive_version in ARCHIVE_VERSIONS:
             #for itr in range(NUM_ITR):
-            command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ARCHIVE_NAME, archive_version, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE)
+            command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ARCHIVE_NAME, archive_version, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE)
             os.system(command)
             print("Run command " + command)

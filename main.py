@@ -20,7 +20,7 @@ def print_summary_exp(args):
     print(" --- Summary exp ---")
 
     print("Archive Name: ",    args.archive_name)
-    print("Dataset Name: ",    vv)
+    print("Dataset Name: ",    args.ds_name)
     print("Archive Version: ", args.archive_version)    
     print("Exp name        :", args.exp_name)
     print("Num itr         :", args.iter)
@@ -53,7 +53,7 @@ def training(args):
     )
 
     # Create output directory
-    OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.archive_name, args.archive_version, args.ds_name, args.model, str(args.aug_method), "Itr_%i" % args.iter)
+    OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.archive_name, args.archive_version, args.ds_name, args.model, str(args.aug_method), args.ds_name, "Itr_%i" % args.iter)
     create_dir_if_not_exists(OUTPUT_DIR)
 
     # Load model
