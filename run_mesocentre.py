@@ -34,8 +34,6 @@ UCR_DATASETS_2018 = [
     'Wafer', 'Wine', 'WordSynonyms', 'Worms', 'WormsTwoClass', 'Yoga'
 ]
 
-DS_2018 = ['ACSF1', 'Adiac']
-
 AUG_METHODS      = []
 AUG_EACH_EPCH    = False             
 MULTI_AUG        = False
@@ -50,7 +48,7 @@ ARCHIVE_VERSIONS = ["bim", "gm", "gm-wo-const", "sgm-wo-const"]
 EPOCHS      = 900
 BATCH_SIZE  = 64
 
-for ds_name in DS_2018:
+for ds_name in UCR_DATASETS_2018:
     for archive_version in ARCHIVE_VERSIONS:
         #for itr in range(NUM_ITR):
         command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ARCHIVE_NAME, archive_version, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE)
