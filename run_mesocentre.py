@@ -34,14 +34,14 @@ UCR_DATASETS_2018 = [
     'Wafer', 'Wine', 'WordSynonyms', 'Worms', 'WormsTwoClass', 'Yoga'
 ]
 
-UCR_DATASETS_2018 = ['ACSF1']
+DS_2018 = ['ACSF1']
 
 AUG_METHODS      = []
 AUG_EACH_EPCH    = False             
 MULTI_AUG        = False
 MULTI_AUG_METHOD = 'MULTI'         
 ONLY_AUG_DATA    = False           
-EXP_NAME         = "OneAug_Aug_Only"
+EXP_NAME         = "DA_p_test"
 NUM_ITR          = 1
 CLSSF_NAME       = "fcn"
 
@@ -50,11 +50,11 @@ BATCH_SIZE  = 64
 
 for ds_name in DS_2018:
     if not MULTI_AUG:
-        for aug in AUG_METHODS:
-            for itr in range(NUM_ITR):
-                command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
-                os.system(command)
-                print("Run command " + command)
+#        for aug in AUG_METHODS:
+        for itr in range(NUM_ITR):
+            command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+            os.system(command)
+            print("Run command " + command)
     else:
         # Several aug at the time
         aug_str = "'"

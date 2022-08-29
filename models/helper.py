@@ -1,6 +1,7 @@
 from models.models import *
 
 MODEL_LIST = {
+    "fcn":      fcn,
     "vgg":      cnn_vgg, 
     "lstm":     lstm1v0, 
     "lstm1":    lstm1, 
@@ -12,7 +13,6 @@ MODEL_LIST = {
     "mlp":      mlp4, 
     "lenet":    cnn_lenet, 
     "inception": inception,
-    "fcn":      fcn
 }
 
 

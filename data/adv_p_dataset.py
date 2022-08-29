@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 from utils.constants import PATH_ADV_P
-from ucr_archive import UCR_ARCHIVE_2018_DATASETS
+from data.ucr_archive import UCR_ARCHIVE_2018_DATASETS
 
 
 def load_dataset(ds_name, UCR_version=2018):

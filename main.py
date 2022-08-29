@@ -87,8 +87,8 @@ def training(args):
     records["training_time"] = training_time
     records["inf_time_train"]= inf_time_train
     records["inf_time_test"] = inf_time_test
-    records["train_acc"]     = tf.keras.metrics.categorical_accuracy(y_test, y_pred_train).numpy().mean()
-    records["train_loss"]    = tf.keras.metrics.get(args.loss)(y_test, y_pred_train).numpy().mean()
+    records["train_acc"]     = tf.keras.metrics.categorical_accuracy(y_train, y_pred_train).numpy().mean()
+    records["train_loss"]    = tf.keras.metrics.get(args.loss)(y_train, y_pred_train).numpy().mean()
     records["test_acc"]      = tf.keras.metrics.categorical_accuracy(y_test, y_pred_test).numpy().mean()
     records["test_loss"]     = tf.keras.metrics.get(args.loss)(y_test, y_pred_test).numpy().mean()
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--exp_name", type=str, help="Unique name identifier for the experiment")
     # Args for datasets
-    parser.add_argument("--ucr_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
+    parser.add_argument("--ds_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
     parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'))
