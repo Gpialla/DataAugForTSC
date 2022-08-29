@@ -10,7 +10,7 @@ from models.helper import MODEL_LIST, get_model_by_name
 from data_aug.helper import AUG_METHODS, get_aug_by_name, SequenceDataAugmentation, MultiAugMethod
 from data.helper import PREPROCESSINGS_NAMES
 from data.data_preprocessing import labels_encoding
-from data.helper import load_ucr_dataset, get_preprocessing_by_name
+from data.helper import load_ds_from__archive, get_preprocessing_by_name
 
 from utils.constants import DEFAULT_OUTPUT_DIR
 from utils.utils import create_dir_if_not_exists, save_keras_history, save_predictions, save_records
@@ -18,6 +18,10 @@ from utils.utils import create_dir_if_not_exists, save_keras_history, save_predi
 def print_summary_exp(args):
     print()
     print(" --- Summary exp ---")
+
+    print("Archive Name: ",    args.archive_name)
+    print("Dataset Name: ",    args.ds_name)
+    print("Archive Version: ", args.archive_version)    
     print("Exp name        :", args.exp_name)
     print("Num itr         :", args.iter)
     print("Model           :", args.model)
@@ -31,7 +35,7 @@ def training(args):
     print_summary_exp(args)
 
     # Load data
-    x_train, y_train, x_test, y_test = load_ucr_dataset(args.ds_name, args.ucr_version)
+    x_train, y_train, x_test, y_test = load_ds_from__archive(args.archive_name, args.ds_name, args.archive_version)
     # Preprocessing
     preproc = get_preprocessing_by_name(args.preproc)
     x_train, x_test = preproc(x_train, x_test)
@@ -104,7 +108,8 @@ if __name__ == "__main__":
 
     parser.add_argument("--exp_name", type=str, help="Unique name identifier for the experiment")
     # Args for datasets
-    parser.add_argument("--ds_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
+    parser.add_argument("--archive_name", type=str, default="UCR", choices=["UCR", "adv_p"], help="The archive's name")
+    parser.add_argument("--archive_version", type=str, default="2018", help="The version of the archive.")
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
     parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'))

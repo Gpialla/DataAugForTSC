@@ -34,7 +34,7 @@ UCR_DATASETS_2018 = [
     'Wafer', 'Wine', 'WordSynonyms', 'Worms', 'WormsTwoClass', 'Yoga'
 ]
 
-DS_2018 = ['ACSF1']
+DS_2018 = ['ACSF1', 'Adiac']
 
 AUG_METHODS      = []
 AUG_EACH_EPCH    = False             
@@ -44,24 +44,16 @@ ONLY_AUG_DATA    = False
 EXP_NAME         = "DA_p_test"
 NUM_ITR          = 1
 CLSSF_NAME       = "fcn"
+ARCHIVE_NAME     = "adv_p"
+ARCHIVE_VERSIONS = ["bim", "gm", "gm-wo-const", "sgm-wo-const"]
 
 EPOCHS      = 900
 BATCH_SIZE  = 64
 
 for ds_name in DS_2018:
     if not MULTI_AUG:
-#        for aug in AUG_METHODS:
-        for itr in range(NUM_ITR):
-            command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
-            os.system(command)
-            print("Run command " + command)
-    else:
-        # Several aug at the time
-        aug_str = "'"
-        for aug in AUG_METHODS: aug_str += aug + ' '
-        aug_str=aug_str[:-1]+"'"
-
-        for itr in range(NUM_ITR):
-            command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ds_name, aug_str, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
-            os.system(command)
-            print("Run command " + command)
+        for archive_version in ARCHIVE_VERSIONS:
+            for itr in range(NUM_ITR):
+                command = "sbatch sbatch-main.sh {} {} {} {} {} {} {} {} {}".format(EXP_NAME, ARCHIVE_NAME, archive_version, ds_name, AUG_EACH_EPCH, ONLY_AUG_DATA, MULTI_AUG_METHOD, CLSSF_NAME, EPOCHS, BATCH_SIZE, itr)
+                os.system(command)
+                print("Run command " + command)
