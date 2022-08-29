@@ -9,7 +9,7 @@ class Computer(Enum):
     APOPHIS = 4
     MAXIME  = 5
 
-curr_computer = Computer.MAXIME
+curr_computer = Computer.MESOCTR
 
 if curr_computer == Computer.UHA:
     # Path to datasets
@@ -23,6 +23,7 @@ elif curr_computer == Computer.MESOCTR:
     # Path to datasets
     PATH_UCR_ARCHIVE_2015 = "/home2020/home/uha/gpialla/datasets/UCRArchive_2015"
     PATH_UCR_ARCHIVE_2018 = "/home2020/home/uha/gpialla/datasets/UCRArchive_2018"
+    PATH_ADV_P            = "/home2020/home/uha/gpialla/datasets/adv_p"
 
     # Default output directory
     DEFAULT_OUTPUT_DIR = "/home2020/home/uha/gpialla/results"

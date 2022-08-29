@@ -81,7 +81,46 @@ def inception(input_shape, nb_class):
     model = clsf.build_model(input_shape, nb_class)
     model.summary()
     return model
-    
+
+class Classifier_FCN:
+
+	def __init__(self, input_shape, nb_classes, verbose=False,build=True):
+
+		if build == True:
+			self.model = self.build_model(input_shape, nb_classes)
+			if(verbose==True):
+				self.model.summary()
+			self.verbose = verbose
+		return
+
+	def build_model(self, input_shape, nb_classes):
+		input_layer = layers.Input(input_shape)
+
+		conv1 = layers.Conv1D(filters=128, kernel_size=8, padding='same')(input_layer)
+		conv1 = layers.BatchNormalization()(conv1)
+		conv1 = layers.Activation(activation='relu')(conv1)
+
+		conv2 = layers.Conv1D(filters=256, kernel_size=5, padding='same')(conv1)
+		conv2 = layers.BatchNormalization()(conv2)
+		conv2 = layers.Activation('relu')(conv2)
+
+		conv3 = layers.Conv1D(128, kernel_size=3,padding='same')(conv2)
+		conv3 = layers.BatchNormalization()(conv3)
+		conv3 = layers.Activation('relu')(conv3)
+
+		gap_layer = layers.GlobalAveragePooling1D()(conv3)
+
+		output_layer = layers.Dense(nb_classes, activation='softmax')(gap_layer)
+
+		model = Model(inputs=input_layer, outputs=output_layer)
+
+		return model 
+
+def fcn(input_shape, nb_class):
+    clsf = Classifier_FCN(input_shape, nb_class)
+    model = clsf.build_model(input_shape, nb_class)
+    model.summary()
+    return model
 
 def mlp4(input_shape, nb_class):
     # Z. Wang, W. Yan, T. Oates, "Time Series Classification from Scratch with Deep Neural Networks: A Strong Baseline," Int. Joint Conf. Neural Networks, 2017, pp. 1578-1585

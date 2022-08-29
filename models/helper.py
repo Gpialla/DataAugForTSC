@@ -11,7 +11,8 @@ MODEL_LIST = {
     "resnet":   cnn_resnet, 
     "mlp":      mlp4, 
     "lenet":    cnn_lenet, 
-    "inception": inception
+    "inception": inception,
+    "fcn":      fcn
 }
 
 
