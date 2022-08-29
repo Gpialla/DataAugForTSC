@@ -18,7 +18,7 @@ def load_dataset(ds_name, DS_version):
     """
 
     if not ds_name in UCR_ARCHIVE_2018_DATASETS:
-        raise ValueError("Parameter 'ds_name' '%s' is an unknown dataset.\nTry with one of the following: '%s'" % (UCR_version, UCR_ARCHIVE_2018_DATASETS))
+        raise ValueError("Parameter 'ds_name' '%s' is an unknown dataset.\nTry with one of the following: '%s'" % (ds_name, UCR_ARCHIVE_2018_DATASETS))
     
     if not DS_version in DS_VERSIONS:
         raise ValueError("Parameter 'DS_version' '%s' is an unknown version.\nTry with one of the following: '%s'" % (DS_version, DS_VERSIONS))

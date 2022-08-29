@@ -53,7 +53,7 @@ def training(args):
     )
 
     # Create output directory
-    OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.archive_name, args.archive_version, args.ds_name, args.model, str(args.aug_method), args.ds_name, "Itr_%i" % args.iter)
+    OUTPUT_DIR = os.path.join(args.output_dir, args.exp_name, args.archive_name, args.archive_version, args.ds_name, args.model, str(args.aug_method), "Itr_%i" % args.iter)
     create_dir_if_not_exists(OUTPUT_DIR)
 
     # Load model
@@ -91,8 +91,6 @@ def training(args):
     records["training_time"] = training_time
     records["inf_time_train"]= inf_time_train
     records["inf_time_test"] = inf_time_test
-    records["train_acc"]     = tf.keras.metrics.categorical_accuracy(y_train, y_pred_train).numpy().mean()
-    records["train_loss"]    = tf.keras.metrics.get(args.loss)(y_train, y_pred_train).numpy().mean()
     records["test_acc"]      = tf.keras.metrics.categorical_accuracy(y_test, y_pred_test).numpy().mean()
     records["test_loss"]     = tf.keras.metrics.get(args.loss)(y_test, y_pred_test).numpy().mean()
 
