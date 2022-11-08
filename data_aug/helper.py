@@ -18,11 +18,14 @@ AUG_METHODS = {
     "windowslice":  window_slice,
     "windowwarp":   window_warp,
     "spawner":  spawner,
-    "rgw":      random_guided_warp,
-    "rgws":     random_guided_warp_shape,
-    "wdba":     wdba,
-    "dgw":      discriminative_guided_warp,
-    "dgws":     discriminative_guided_warp_shape,
+    "rgw"    :  random_guided_warp,
+    "rgws"   :  random_guided_warp_shape,
+    "wdba"   :  wdba,
+    "dgw"    :  discriminative_guided_warp,
+    "dgws"   :  discriminative_guided_warp_shape,
+
+    "scaling_multi":      scaling_multi,
+    "windowwarp_multi":   window_warp_multi,
 }
 
 def get_aug_by_name(name):

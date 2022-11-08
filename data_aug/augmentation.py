@@ -10,6 +10,19 @@ def scaling(x, y, sigma=0.1):
     factor = np.random.normal(loc=1., scale=sigma, size=(x.shape[0],x.shape[2]))
     return np.multiply(x, factor[:,np.newaxis,:])
 
+def scaling_multi(x, y, sigma=0.03, mode="B"):
+    # Scaling for multivariate time series
+    # All the channels of a TS are multiplied by the same scale
+    B, TS, C = x.shape # Channels last
+    if mode == 'B':
+        scales = np.random.normal(loc=1., scale=sigma, size=(B))
+        return np.einsum("btc,b->btc", x, scales)
+    if mode == 'C':
+        scales = np.random.normal(loc=1., scale=sigma, size=(C))
+        return np.einsum("btc,c->btc", x, scales)
+    else:
+        raise NotImplementedError
+
 def rotation(x, y):
     flip = np.random.choice([-1, 1], size=(x.shape[0],x.shape[2]))
     rotate_axis = np.arange(x.shape[2])
@@ -96,6 +109,31 @@ def window_warp(x, y, window_ratio=0.1, scales=[0.5, 2.]):
             warped = np.concatenate((start_seg, window_seg, end_seg))                
             ret[i,:,dim] = np.interp(np.arange(x.shape[1]), np.linspace(0, x.shape[1]-1., num=warped.size), warped).T
     return ret
+
+def window_warp_multi(x, y, window_ratio=0.1, scales=[0.5, 2.], mode="B"):
+    # https://halshs.archives-ouvertes.fr/halshs-01357973/document
+
+    if mode == 'B':
+        B_SIZE, TS_LENGTH, C = x.shape
+        warp_scales  = np.random.choice(scales, B_SIZE)
+        warp_size    = np.ceil(window_ratio*TS_LENGTH).astype(int)
+        window_steps = np.arange(warp_size)
+        
+        window_starts = np.random.randint(low=1, high=TS_LENGTH-warp_size-1, size=(B_SIZE)).astype(int)
+        window_ends   = (window_starts + warp_size).astype(int)
+        
+        ret = np.zeros_like(x)
+        for i, pat in enumerate(x):
+            for dim in range(C):
+                start_seg = pat[:window_starts[i], dim]
+                window_seg = np.interp(np.linspace(0, warp_size-1, num=int(warp_size*warp_scales[i])), window_steps, pat[window_starts[i]:window_ends[i],dim])
+                end_seg = pat[window_ends[i]:,dim]
+                warped = np.concatenate((start_seg, window_seg, end_seg))                
+                ret[i,:,dim] = np.interp(np.arange(x.shape[1]), np.linspace(0, x.shape[1]-1., num=warped.size), warped).T
+        return ret 
+    else:
+        raise NotImplementedError
+
 
 def spawner(x, y, sigma=0.05, slope_constraint="symmetric", verbose=0):
     # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6983028/

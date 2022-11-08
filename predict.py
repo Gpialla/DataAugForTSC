@@ -30,9 +30,9 @@ def training(args):
     PATH_BEST_WEIGHTS = os.path.join(OUTPUT_DIR, "best_weights.h5")
     model = tf.keras.models.load_model(PATH_BEST_WEIGHTS)
     y_pred_train = model.predict(x_train)
-    y_pred_test  = model.predict(x_test)
+    #y_pred_test  = model.predict(x_test)
     save_predictions(y_pred_train, os.path.join(OUTPUT_DIR, "y_preds_train.npy"))
-    save_predictions(y_pred_test,  os.path.join(OUTPUT_DIR, "y_preds_test.npy"))
+    #save_predictions(y_pred_test,  os.path.join(OUTPUT_DIR, "y_preds_test.npy"))
 
 
 if __name__ == "__main__":
@@ -67,6 +67,8 @@ if __name__ == "__main__":
     elif args.multi_aug_method == 'MIXED':
         args.multi_aug_method = MultiAugMethod.MIXED
     
+    args.aug_method = args.aug_method[0]
+
     # Handling text to boolean
     args.aug_each_epch = args.aug_each_epch == 'True'
     args.only_aug_data = args.only_aug_data == 'True'

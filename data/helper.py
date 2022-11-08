@@ -1,6 +1,10 @@
 # Imports
-from data.ucr_archive import load_dataset
-from data.ucr_archive import UCR_ARCHIVE_2015_DATASETS, UCR_ARCHIVE_2018_DATASETS, UCR_VERSIONS
+from data.ucr_archive   import load_dataset as load_ucr
+from data.ucr_archive   import UCR_ARCHIVE_2015_DATASETS, UCR_ARCHIVE_2018_DATASETS, UCR_VERSIONS
+from data.uea_archive   import load_dataset as load_uea
+from data.uea_archive   import UEA_ARCHIVE_2018_DATASETS
+from data.digitsRTD     import load_dataset as load_digits_dataset
+from data.adv_p_dataset import load_dataset as load_adv_p
 
 PREPROCESSINGS_NAMES = ["z_norm", "feature_scaling"]
 
@@ -28,8 +32,34 @@ def load_ucr_dataset(ds_name, UCR_version):
         tuple: The dataset.
         x_train, y_train, x_test, y_test = load_ucr_dataset(ds_name, UCR_version)
     """
-    from data.ucr_archive import load_dataset
-    return load_dataset(ds_name, UCR_version)
+    return load_ucr(ds_name, UCR_version)
+
+def load_digits_dataset():
+    """
+    Returns:
+        tuple: The dataset.
+        x_train, y_train, x_test, y_test = load_ucr_dataset(ds_name, UCR_version)
+    """
+    return load_digits_dataset()
+
+def load_adv_p_dataset(ds_name, UCR_version):
+    """
+    Returns:
+        tuple: The dataset.
+        x_train, y_train, x_test, y_test = load_ucr_dataset(ds_name, UCR_version)
+    """
+    return load_adv_p(ds_name)
+
+def load_uea_dataset(ds_name):
+    """
+    Args:
+        ds_name (str): The name of the dataset
+
+    Returns:
+        tuple: The dataset.
+        x_train, y_train, x_test, y_test = load_uea(ds_name)
+    """
+    return load_uea(ds_name)
 
 def get_ucr_list_datasets(list_ds_name, UCR_version):
     """
@@ -41,10 +71,23 @@ def get_ucr_list_datasets(list_ds_name, UCR_version):
         dict: A dict containing all datasets.
         x_train, y_train, x_test, y_test = dict[ds_name]
     """
-    from ucr_archive import load_dataset
     all_ds = {}
     for ds_name in list_ds_name:
-        all_ds[ds_name] = load_dataset(ds_name, UCR_version)
+        all_ds[ds_name] = load_ucr(ds_name, UCR_version)
+    return all_ds
+
+def get_uea_list_datasets(list_ds_name):
+    """
+    Args:
+        list_ds_name (list): A list containing the dataset names
+
+    Returns:
+        dict: A dict containing all datasets.
+        x_train, y_train, x_test, y_test = dict[ds_name]
+    """
+    all_ds = {}
+    for ds_name in list_ds_name:
+        all_ds[ds_name] = load_uea(ds_name)
     return all_ds
 
 def get_ucr_all(UCR_version):
@@ -60,6 +103,14 @@ def get_ucr_all(UCR_version):
         return get_ucr_list_datasets(UCR_ARCHIVE_2015_DATASETS, UCR_version)
     if UCR_version==2018:
         return get_ucr_list_datasets(UCR_ARCHIVE_2018_DATASETS, UCR_version)
+
+def get_uea_all():
+    """
+    Returns:
+        dict: A dict containing all datasets.
+        x_train, y_train, x_test, y_test = dict[ds_name]
+    """
+    return get_uea_list_datasets(UEA_ARCHIVE_2018_DATASETS)
 
 def get_ucr_first_10(UCR_version):
     """

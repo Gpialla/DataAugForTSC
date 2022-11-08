@@ -34,15 +34,19 @@ UCR_DATASETS_2018 = [
     'Wafer', 'Wine', 'WordSynonyms', 'Worms', 'WormsTwoClass', 'Yoga'
 ]
 
-
-DS_2018 = [
-	'ACSF1', 'Adiac', 'AllGestureWiimoteX', 'AllGestureWiimoteY', 'AllGestureWiimoteZ',
-	'ArrowHead', 'Beef', 'BeetleFly', 'BirdChicken', 'BME', 'Car', 'CBF', 'Chinatown',
-	'ChlorineConcentration', 'CinCECGTorso', 'Coffee', 'Computers', 'CricketX',
-	'CricketY', 'CricketZ', 'Crop', 'DiatomSizeReduction'
+UEA_ARCHIVE_2018_DATASETS = [
+    'ArticularyWordRecognition', 'FingerMovements', 'JapaneseVowels', 
+    'InsectWingbeat', 'MotorImagery', 'HandMovementDirection', 'Epilepsy', 
+    'UWaveGestureLibrary', 'Cricket', 'BasicMotions', 'AtrialFibrillation', 
+    'Heartbeat', 'ERing', 'SelfRegulationSCP1', 'RacketSports', 
+    'CharacterTrajectories', 'NATOPS', 'SelfRegulationSCP2', 'EigenWorms', 
+    'PenDigits', 'Handwriting', 'StandWalkJump', 'PEMS-SF', 
+    'EthanolConcentration', 'FaceDetection', 'LSST', 'SpokenArabicDigits', 
+    'Libras', 'DuckDuckGeese', 'PhonemeSpectra'
 ]
 
-AUG_METHODS      = ["dgw", "rgw", "scaling", "windowwarp"]
+
+AUG_METHODS      = ["scaling_multi", "windowwarp_multi"]
 AUG_EACH_EPCH    = False             
 MULTI_AUG        = False
 MULTI_AUG_METHOD = 'MULTI'         

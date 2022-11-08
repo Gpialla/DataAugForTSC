@@ -14,15 +14,24 @@ def z_norm(x_train, x_test):
         (np.array, np.array): (X_train, X_test), both normalized
     """
     # TODO: randomize x_train
-    
-    std_ = x_train.std(axis=1, keepdims=True)
-    std_[std_ == 0] = 1.0
-    x_train_prep = (x_train - x_train.mean(axis=1, keepdims=True)) / std_
 
-    std_ = x_test.std(axis=1, keepdims=True)
-    std_[std_ == 0] = 1.0
-    x_test_prep = (x_test - x_test.mean(axis=1, keepdims=True)) / std_
-    return x_train_prep, x_test_prep
+    B, TS, C  = x_train.shape
+    x_reshape = x_train.reshape((B*TS, C))
+    mean_per_channel = x_reshape.mean(axis=0)
+    std_per_channel  = x_reshape.std(axis=0)
+    std_per_channel[std_per_channel == 0] = 1.0
+    x_reshape = (x_reshape - mean_per_channel) / std_per_channel
+    x_train   = x_reshape.reshape(B, TS, C)
+
+    B, TS, C  = x_test.shape
+    x_reshape = x_test.reshape((B*TS, C))
+    mean_per_channel = x_reshape.mean(axis=0)
+    std_per_channel  = x_reshape.std(axis=0)
+    std_per_channel[std_per_channel == 0] = 1.0
+    x_reshape = (x_reshape - mean_per_channel) / std_per_channel
+    x_test    = x_reshape.reshape(B, TS, C)
+
+    return x_train, x_test
 
 def feature_scaling(x_train, x_test):
     """

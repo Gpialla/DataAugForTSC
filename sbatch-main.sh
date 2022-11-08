@@ -8,4 +8,4 @@ source activate transformers
 
 cd ~/projects/TimeSeriesClassification
 
-python3 main.py --exp_name $1 --ds_name $2 --aug_method $3 --aug_each_epch $4 --only_aug_data $5--multi_aug_method $6 --model $7 --num_epochs $8 --batch_size $9 --iter ${10}
+python3 main.py --archive DigitsRTD --model inception --num_epochs 1000 --batch_size 32 --iter 0
