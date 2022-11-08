@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --gres=gpu:1 --constraint=gpu1080|gpup100
 #SBATCH --job-name="DA_P"
-#SBATCH  -p grantgpu -A g2021a322g
+#SBATCH  -p grantgpu -A g2022a329g
 
 module load python/Anaconda3
 source activate transformers
