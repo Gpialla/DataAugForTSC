@@ -10,11 +10,7 @@ from models.helper import MODEL_LIST, get_model_by_name
 from data_aug.helper import AUG_METHODS, get_aug_by_name, SequenceDataAugmentation, MultiAugMethod
 from data.helper import PREPROCESSINGS_NAMES
 from data.data_preprocessing import labels_encoding
-<<<<<<< HEAD
 from data.helper import load_ucr_dataset, load_uea_dataset, load_digits_dataset, get_preprocessing_by_name
-=======
-from data.helper import load_ds_from__archive, get_preprocessing_by_name
->>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
 
 from utils.constants import DEFAULT_OUTPUT_DIR
 from utils.utils import create_dir_if_not_exists, save_keras_history, save_predictions, save_records
@@ -39,7 +35,6 @@ def training(args):
     print_summary_exp(args)
 
     # Load data
-<<<<<<< HEAD
     if args.archive   == 'UCR':
         x_train, y_train, x_test, y_test = load_ucr_dataset(args.ds_name, args.ucr_version)
     elif args.archive == 'UEA':
@@ -47,9 +42,6 @@ def training(args):
     elif args.archive == 'DigitsRTD':
         x_train, y_train, x_test, y_test = load_digits_dataset()
 
-=======
-    x_train, y_train, x_test, y_test = load_ds_from__archive(args.archive_name, args.ds_name, args.archive_version)
->>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
     # Preprocessing
     preproc = get_preprocessing_by_name(args.preproc)
     x_train, x_test = preproc(x_train, x_test)
@@ -105,11 +97,8 @@ def training(args):
     records["training_time"] = training_time
     records["inf_time_train"]= inf_time_train
     records["inf_time_test"] = inf_time_test
-<<<<<<< HEAD
     records["train_acc"]     = tf.keras.metrics.categorical_accuracy(y_train, y_pred_train).numpy().mean()
     records["train_loss"]    = tf.keras.metrics.get(args.loss)(y_train, y_pred_train).numpy().mean()
-=======
->>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
     records["test_acc"]      = tf.keras.metrics.categorical_accuracy(y_test, y_pred_test).numpy().mean()
     records["test_loss"]     = tf.keras.metrics.get(args.loss)(y_test, y_pred_test).numpy().mean()
 
@@ -125,14 +114,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--exp_name", type=str, help="Unique name identifier for the experiment")
     # Args for datasets
-<<<<<<< HEAD
     parser.add_argument("--archive", type=str, default='UCR', choices=('UCR', 'UEA', 'DigitsRTD'), help="The name of the archive containing the dataset.")
     parser.add_argument("--ucr_version", type=int, default=2018, choices=[2015, 2018], help="The name of the dataset.")
     parser.add_argument("--uea_version", type=int, default=2018, choices=[2018],       help="The name of the dataset.")
-=======
-    parser.add_argument("--archive_name", type=str, default="UCR", choices=["UCR", "adv_p"], help="The archive's name")
-    parser.add_argument("--archive_version", type=str, default="2018", help="The version of the archive.")
->>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
     parser.add_argument("--ds_name", type=str, help="The dataset's name")
     parser.add_argument("--aug_method", type=str, default=None, choices=AUG_METHODS.keys(), nargs='+')
     parser.add_argument("--multi_aug_method", type=str, default='MULTI', choices=('MULTI', 'MIXED'))
