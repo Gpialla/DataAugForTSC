@@ -34,7 +34,6 @@ UCR_DATASETS_2018 = [
     'Wafer', 'Wine', 'WordSynonyms', 'Worms', 'WormsTwoClass', 'Yoga'
 ]
 
-<<<<<<< HEAD
 UEA_ARCHIVE_2018_DATASETS = [
     'ArticularyWordRecognition', 'FingerMovements', 'JapaneseVowels', 
     'InsectWingbeat', 'MotorImagery', 'HandMovementDirection', 'Epilepsy', 
@@ -48,9 +47,6 @@ UEA_ARCHIVE_2018_DATASETS = [
 
 
 AUG_METHODS      = ["scaling_multi", "windowwarp_multi"]
-=======
-AUG_METHODS      = []
->>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
 AUG_EACH_EPCH    = False             
 MULTI_AUG        = False
 MULTI_AUG_METHOD = 'MULTI'         

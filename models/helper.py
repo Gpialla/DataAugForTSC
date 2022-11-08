@@ -13,12 +13,8 @@ MODEL_LIST = {
     "mlp":      mlp4, 
     "lenet":    cnn_lenet, 
     "inception": inception,
-<<<<<<< HEAD
     "fcn":      fcn
-=======
->>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
 }
-
 
 def get_model_by_name(name):
     """
