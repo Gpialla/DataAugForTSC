@@ -1,12 +1,23 @@
 # Imports
+<<<<<<< HEAD
 from data.ucr_archive   import load_dataset as load_ucr
 from data.ucr_archive   import UCR_ARCHIVE_2015_DATASETS, UCR_ARCHIVE_2018_DATASETS, UCR_VERSIONS
 from data.uea_archive   import load_dataset as load_uea
 from data.uea_archive   import UEA_ARCHIVE_2018_DATASETS
 from data.digitsRTD     import load_dataset as load_digits_dataset
 from data.adv_p_dataset import load_dataset as load_adv_p
+=======
+from data.ucr_archive import UCR_ARCHIVE_2015_DATASETS, UCR_ARCHIVE_2018_DATASETS, UCR_VERSIONS
+>>>>>>> 404fa2162f872a68c895f97db16fa2a2e8d16bae
+
 
 PREPROCESSINGS_NAMES = ["z_norm", "feature_scaling"]
+
+def load_ds_from__archive(archive_name, ds_name, ds_version):
+    if archive_name == "UCR":
+        return load_ucr_dataset(ds_name, int(ds_version))
+    elif archive_name == "adv_p":
+        return load_adv_p_dataset(ds_name, ds_version)
 
 def get_preprocessing_by_name(name):
     """
@@ -22,6 +33,15 @@ def get_preprocessing_by_name(name):
     elif name=="feature_scaling":
         from data.data_preprocessing import feature_scaling
         return feature_scaling
+
+def load_adv_p_dataset(ds_name, DS_version):
+    """
+    Returns:
+        tuple: The dataset.
+        x_train, y_train, x_test, y_test = load_ucr_dataset(ds_name, UCR_version)
+    """
+    from data.adv_p_dataset import load_dataset as load_adv_p
+    return load_adv_p(ds_name, DS_version)
 
 def load_ucr_dataset(ds_name, UCR_version):
     """
